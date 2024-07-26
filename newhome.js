@@ -441,9 +441,18 @@ function webcamInference() {
     "video_canvas",
   ]);
 
+  var constraints = {
+    audio: false,
+    video: {
+      width: { ideal: 640 },
+      height: { ideal: 480 },
+      facingMode: "environment",
+    },
+  };
+
   navigator.mediaDevices
     // not user facing camera
-    .getUserMedia({ video: { facingMode: "environment" } })
+    .getUserMedia(constraints)
     .then(function (stream) {
       main_stream = stream;
 
@@ -471,18 +480,24 @@ function webcamInference() {
         video.play();
         // hide video
       };
+
       // on full load
       video.onplay = function () {
+        const settings = stream.getVideoTracks()[0].getSettings();
+        console.log(settings);
         height = video.videoHeight;
         width = video.videoWidth;
+        console.log(
+          `stream width: ${width} canvas width: ${canvas.style.width}`
+        );
 
         video.setAttribute("width", width);
         video.setAttribute("height", height);
-        video.style.width = width + "px";
-        video.style.height = height + "px";
+        video.style.width = canvas.style.width + "px";
+        video.style.height = canvas.style.height + "px";
 
-        canvas.style.width = width + "px";
-        canvas.style.height = height + "px";
+        // canvas.style.width = width + "px";
+        // canvas.style.height = height + "px";
         canvas.width = width;
         canvas.height = height;
 

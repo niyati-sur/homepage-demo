@@ -148,6 +148,7 @@ async function getModel() {
     await inferEngine.stopWorker(modelWorkerId);
   }
   modelWorkerId = null;
+  console.log("getting model");
   return await inferEngine.startWorker(
     current_model_name,
     current_model_version,
@@ -216,7 +217,10 @@ async function switchModel() {
     setImageState(LOADING_URL, "video_canvas");
   }
 
-  getModel().then((id) => (modelWorkerId = id));
+  getModel().then((id) => {
+    modelWorkerId = id;
+    console.log("model loaded");
+  });
 }
 
 // apply switchModel to select
@@ -359,18 +363,22 @@ function webcamInference() {
       .then(function (stream) {
         // if video exists, show it
         // create video element
+        const settings = stream.getVideoTracks()[0].getSettings();
+        console.log(settings);
         var video = document.createElement("video");
         video.srcObject = stream;
         video.id = "video1";
         video.setAttribute("playsinline", "");
         video.play();
 
-        video.height = height;
+        video.height = settings.height;
         video.style.height = height + "px";
-        video.width = width;
+        video.width = settings.width;
         video.style.width = width + "px";
 
         var canvas = document.getElementById("video_canvas");
+        // canvas.width = settings.width;
+        // canvas.height = settings.height;
         var ctx = canvas.getContext("2d");
 
         ctx.scale(1, 1);
@@ -438,11 +446,13 @@ function getCoordinates(img) {
 
   // scenario 1 - image is more vertical than canvas
   if (canvasRatio >= imageRatio) {
+    console.log("more vertical");
     var sx = 0;
     var sWidth = imageWidth;
     var sHeight = sWidth / canvasRatio;
     var sy = (imageHeight - sHeight) / 2;
   } else {
+    console.log("more horizontal");
     // scenario 2 - image is more horizontal than canvas
     var sy = 0;
     var sHeight = imageHeight;
