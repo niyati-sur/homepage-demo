@@ -277,11 +277,8 @@ function switchModel() {
   }
 
   // hide webcam button if model is not microsoft-coco
-  if (current_model_name != "microsoft-coco") {
-    document.getElementById("webcam-predict").style.display = "none";
-  } else {
-    document.getElementById("webcam-predict").style.display = "inline";
-  }
+
+  document.getElementById("webcam-predict").style.display = "inline";
 
   // change video to use new one
   // var video = document.getElementById("video_source");
@@ -484,13 +481,8 @@ function webcamInference() {
       // on full load
       video.onplay = function () {
         const settings = stream.getVideoTracks()[0].getSettings();
-        console.log(settings);
         height = video.videoHeight;
         width = video.videoWidth;
-        console.log(
-          `stream width: ${width} canvas width: ${canvas.style.width}`
-        );
-
         video.setAttribute("width", width);
         video.setAttribute("height", height);
         video.style.width = canvas.style.width + "px";
