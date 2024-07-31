@@ -107,6 +107,18 @@ for (var item in available_models) {
   model_select.add(option);
 }
 
+document.getElementById("mobile-predict").onclick = () => {
+  if (document.getElementById("video1")) {
+    document.getElementById("video1").style.display = "none";
+    // hide video_canvas
+    document.getElementById("video_canvas").style.display = "none";
+  }
+  document.getElementById("picture_canvas").style.display = "none";
+  document.getElementById("example_demo").style.display = "none";
+  document.getElementById("picture").style.display = "none";
+  document.getElementById("mobile-picture").style.display = "block";
+};
+
 var current_model_name = "microsoft-coco";
 var current_model_version = 9;
 const API_KEY = "rf_U7AD2Mxh39N7jQ3B6cP8xAyufLH3";
@@ -240,6 +252,7 @@ document
     }
     // show picture canvas
     document.getElementById("picture_canvas").style.display = "block";
+    document.getElementById("mobile-picture").style.display = "none";
     webcamInference();
   });
 
@@ -574,6 +587,10 @@ function getBase64Image(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
 function imageInference(e) {
   webcamLoop = false;
   // replace canvas with image
+  console.log(
+    "set mobile picture none: " +
+      document.getElementById("mobile-picture").style.display
+  );
   document.getElementById("picture_canvas").style.display = "block";
 
   changeElementState(["picture", "example_demo", "video_canvas"], "none");
@@ -746,6 +763,7 @@ document.getElementById("image-predict").addEventListener("click", function () {
     "video",
     "video_canvas",
     "video1",
+    "mobile-picture",
   ];
   changeElementState(to_hide);
   changeElementState(["prechosen_images_parent", "picture"], "block");
